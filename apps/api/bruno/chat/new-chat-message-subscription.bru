@@ -1,0 +1,34 @@
+meta {
+  name: New Chat Message Subscription
+  type: graphql
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  subscription NewChatMessage($roomId: String!) {
+    newChatMessage(roomId: $roomId) {
+      id
+      roomId
+      senderId
+      content
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "roomId": "ROOM_ID_HERE"
+  }
+}

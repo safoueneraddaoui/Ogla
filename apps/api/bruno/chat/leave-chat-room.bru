@@ -1,0 +1,27 @@
+meta {
+  name: Leave Chat Room
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation LeaveChatRoom($roomId: String!) {
+    leaveChatRoom(roomId: $roomId)
+  }
+}
+
+body:graphql:vars {
+  {
+    "roomId": "ROOM_ID_HERE"
+  }
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Create Chat Room
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation CreateChatRoom($input: CreateRoomInput!) {
+    createChatRoom(input: $input) {
+      id
+      type
+      name
+      participants {
+        id
+        userId
+        joinedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "type": "GROUP",
+      "name": "Team Chat",
+      "participantIds": ["USER_ID_2", "USER_ID_3"]
+    }
+  }
+}

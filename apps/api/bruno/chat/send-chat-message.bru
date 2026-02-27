@@ -1,0 +1,37 @@
+meta {
+  name: Send Chat Message
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation SendChatMessage($input: SendMessageInput!) {
+    sendChatMessage(input: $input) {
+      id
+      roomId
+      senderId
+      content
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "roomId": "ROOM_ID_HERE",
+      "content": "Hello, team!"
+    }
+  }
+}

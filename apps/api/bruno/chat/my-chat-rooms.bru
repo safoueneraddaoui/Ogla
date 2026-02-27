@@ -1,0 +1,38 @@
+meta {
+  name: My Chat Rooms
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query MyChatRooms {
+    myChatRooms {
+      id
+      type
+      name
+      participants {
+        id
+        userId
+        joinedAt
+      }
+      messages {
+        id
+        content
+        senderId
+        createdAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}

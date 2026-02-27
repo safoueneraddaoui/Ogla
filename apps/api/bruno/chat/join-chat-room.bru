@@ -1,0 +1,29 @@
+meta {
+  name: Join Chat Room
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation JoinChatRoom($input: JoinRoomInput!) {
+    joinChatRoom(input: $input)
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "roomId": "ROOM_ID_HERE"
+    }
+  }
+}

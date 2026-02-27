@@ -1,0 +1,27 @@
+meta {
+  name: Mark Message Read
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation MarkMessageRead($messageId: String!) {
+    markMessageRead(messageId: $messageId)
+  }
+}
+
+body:graphql:vars {
+  {
+    "messageId": "MESSAGE_ID_HERE"
+  }
+}

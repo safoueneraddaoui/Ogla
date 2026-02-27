@@ -1,0 +1,35 @@
+meta {
+  name: Chat Messages
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query ChatMessages($roomId: String!, $limit: Int, $cursor: String) {
+    chatMessages(roomId: $roomId, limit: $limit, cursor: $cursor) {
+      id
+      roomId
+      senderId
+      content
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "roomId": "ROOM_ID_HERE",
+    "limit": 50
+  }
+}
