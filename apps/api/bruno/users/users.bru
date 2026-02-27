@@ -1,0 +1,40 @@
+meta {
+  name: List All Users (SuperAdmin)
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query ListUsers($page: Int, $limit: Int) {
+    users(page: $page, limit: $limit) {
+      users {
+        id
+        email
+        firstName
+        lastName
+        role
+        createdAt
+      }
+      total
+      page
+      limit
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "page": 1,
+    "limit": 20
+  }
+}

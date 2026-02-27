@@ -1,0 +1,41 @@
+meta {
+  name: Search Users
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query SearchUsers($query: String!, $page: Int, $limit: Int) {
+    searchUsers(query: $query, page: $page, limit: $limit) {
+      users {
+        id
+        email
+        firstName
+        lastName
+        role
+        avatar
+      }
+      total
+      page
+      limit
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "query": "ali",
+    "page": 1,
+    "limit": 20
+  }
+}

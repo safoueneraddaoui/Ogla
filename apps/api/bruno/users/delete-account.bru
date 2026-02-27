@@ -1,0 +1,21 @@
+meta {
+  name: Delete Account
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation {
+    deleteAccount
+  }
+}

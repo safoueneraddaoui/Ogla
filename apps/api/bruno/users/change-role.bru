@@ -1,0 +1,34 @@
+meta {
+  name: Change Role (SuperAdmin)
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation ChangeRole($input: ChangeRoleInput!) {
+    changeRole(input: $input) {
+      id
+      email
+      role
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "userId": "replace-with-user-id",
+      "role": "SUPER_ADMIN"
+    }
+  }
+}
