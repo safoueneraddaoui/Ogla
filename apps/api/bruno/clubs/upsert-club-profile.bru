@@ -1,0 +1,44 @@
+meta {
+  name: Upsert Club Profile
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpsertClubProfile($input: UpsertClubProfileInput!) {
+    upsertClubProfile(input: $input) {
+      id
+      userId
+      name
+      description
+      address
+      logo
+      disciplines
+      foundedYear
+      website
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "name": "Tigers MMA Club",
+      "description": "Elite MMA and Boxing training since 2010",
+      "address": "12 Rue de la République, Tunis",
+      "disciplines": ["MMA", "Boxing", "Muay Thai"],
+      "foundedYear": 2010,
+      "website": "https://tigers.tn"
+    }
+  }
+}

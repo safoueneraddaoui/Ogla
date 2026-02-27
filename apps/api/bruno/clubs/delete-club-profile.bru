@@ -1,0 +1,21 @@
+meta {
+  name: Delete Club Profile
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation {
+    deleteClubProfile
+  }
+}

@@ -1,0 +1,47 @@
+meta {
+  name: Search Clubs
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query SearchClubs($query: String!, $page: Int, $limit: Int) {
+    searchClubs(query: $query, page: $page, limit: $limit) {
+      profiles {
+        id
+        userId
+        name
+        description
+        address
+        disciplines
+        foundedYear
+        user {
+          id
+          firstName
+          lastName
+        }
+      }
+      total
+      page
+      limit
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "query": "boxing",
+    "page": 1,
+    "limit": 20
+  }
+}

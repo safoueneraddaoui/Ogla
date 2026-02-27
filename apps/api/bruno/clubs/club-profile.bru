@@ -1,0 +1,43 @@
+meta {
+  name: Get Club Profile by ID
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query ClubProfile($id: String!) {
+    clubProfile(id: $id) {
+      id
+      userId
+      name
+      description
+      address
+      logo
+      disciplines
+      foundedYear
+      website
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "replace-with-profile-id"
+  }
+}

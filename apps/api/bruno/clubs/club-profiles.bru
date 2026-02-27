@@ -1,0 +1,49 @@
+meta {
+  name: List Club Profiles
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query ClubProfiles($page: Int, $limit: Int) {
+    clubProfiles(page: $page, limit: $limit) {
+      profiles {
+        id
+        userId
+        name
+        description
+        address
+        logo
+        disciplines
+        foundedYear
+        website
+        user {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+      total
+      page
+      limit
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "page": 1,
+    "limit": 20
+  }
+}
