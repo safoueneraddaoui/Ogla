@@ -1,0 +1,45 @@
+meta {
+  name: Search Athletes
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query SearchAthletes($query: String!, $page: Int, $limit: Int) {
+    searchAthletes(query: $query, page: $page, limit: $limit) {
+      profiles {
+        id
+        userId
+        beltRank
+        weightClass
+        disciplines
+        user {
+          id
+          firstName
+          lastName
+        }
+      }
+      total
+      page
+      limit
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "query": "judo",
+    "page": 1,
+    "limit": 20
+  }
+}

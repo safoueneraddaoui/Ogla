@@ -1,0 +1,42 @@
+meta {
+  name: Get Athlete Profile by ID
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query AthleteProfile($id: String!) {
+    athleteProfile(id: $id) {
+      id
+      userId
+      beltRank
+      weightClass
+      bio
+      disciplines
+      achievements
+      dateOfBirth
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "replace-with-profile-id"
+  }
+}

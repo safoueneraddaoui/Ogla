@@ -1,0 +1,48 @@
+meta {
+  name: List Athlete Profiles
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query AthleteProfiles($page: Int, $limit: Int) {
+    athleteProfiles(page: $page, limit: $limit) {
+      profiles {
+        id
+        userId
+        beltRank
+        weightClass
+        bio
+        disciplines
+        achievements
+        dateOfBirth
+        user {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+      total
+      page
+      limit
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "page": 1,
+    "limit": 20
+  }
+}

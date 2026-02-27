@@ -1,0 +1,42 @@
+meta {
+  name: Get Athlete Profile by User ID
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query AthleteProfileByUserId($userId: String!) {
+    athleteProfileByUserId(userId: $userId) {
+      id
+      userId
+      beltRank
+      weightClass
+      bio
+      disciplines
+      achievements
+      dateOfBirth
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "userId": "replace-with-user-id"
+  }
+}
