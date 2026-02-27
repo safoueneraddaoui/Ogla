@@ -1,0 +1,36 @@
+meta {
+  name: Generate Signed Upload URL
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query GenerateSignedUploadUrl($folder: UploadFolder!, $publicId: String) {
+    generateSignedUploadUrl(folder: $folder, publicId: $publicId) {
+      cloudName
+      apiKey
+      signature
+      timestamp
+      folder
+      publicId
+      uploadUrl
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "folder": "AVATARS",
+    "publicId": null
+  }
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Delete Media
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation DeleteMedia($publicId: String!) {
+    deleteMedia(publicId: $publicId) {
+      publicId
+      result
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "publicId": "avatars/PUBLIC_ID_HERE"
+  }
+}

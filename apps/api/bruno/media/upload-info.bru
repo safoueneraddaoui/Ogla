@@ -1,0 +1,36 @@
+meta {
+  name: Upload Info
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query UploadInfo($publicId: String!) {
+    uploadInfo(publicId: $publicId) {
+      publicId
+      secureUrl
+      resourceType
+      format
+      bytes
+      width
+      height
+      createdAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "publicId": "avatars/PUBLIC_ID_HERE"
+  }
+}
