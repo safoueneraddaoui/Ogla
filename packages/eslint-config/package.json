@@ -1,0 +1,13 @@
+{
+  "name": "@ogla/eslint-config",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "files": ["base.js", "next.js", "nest.js"],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0"
+  }
+}

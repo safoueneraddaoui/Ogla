@@ -1,0 +1,276 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  ATHLETE
+  CLUB
+  SUPER_ADMIN
+}
+
+enum Locale {
+  EN
+  AR
+  FR
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  FACEBOOK
+}
+
+enum AffiliationStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  LEFT
+}
+
+enum CompetitionStatus {
+  DRAFT
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum CompetitionEntryStatus {
+  REGISTERED
+  CONFIRMED
+  WITHDRAWN
+}
+
+enum MatchStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+}
+
+enum ChatRoomType {
+  DM
+  GROUP
+}
+
+enum NotificationType {
+  AFFILIATION
+  COMPETITION
+  CHAT
+  SYSTEM
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id         String       @id @default(cuid())
+  email      String       @unique
+  password   String?
+  role       Role         @default(ATHLETE)
+  firstName  String
+  lastName   String
+  avatar     String?
+  locale     Locale       @default(EN)
+  provider   AuthProvider @default(LOCAL)
+  providerId String?
+
+  athleteProfile    AthleteProfile?
+  clubProfile       ClubProfile?
+  affiliationsAsAthlete Affiliation[] @relation("AthleteAffiliations")
+  affiliationsAsClub    Affiliation[] @relation("ClubAffiliations")
+  competitionEntries    CompetitionEntry[]
+  createdCompetitions   Competition[]
+  matchesAsRed          Match[]       @relation("RedAthlete")
+  matchesAsBlue         Match[]       @relation("BlueAthlete")
+  wonMatches            Match[]       @relation("Winner")
+  chatRooms             ChatRoomParticipant[]
+  messages              Message[]
+  notifications         Notification[]
+  readMessages          MessageRead[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model AthleteProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  beltRank     String?
+  weightClass  String?
+  bio          String?
+  disciplines  String[]
+  achievements Json?
+  dateOfBirth  DateTime?
+
+  @@map("athlete_profiles")
+}
+
+model ClubProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  address     String?
+  logo        String?
+  disciplines String[]
+  foundedYear Int?
+  website     String?
+
+  @@map("club_profiles")
+}
+
+model Affiliation {
+  id         String            @id @default(cuid())
+  athleteId  String
+  clubId     String
+  athlete    User              @relation("AthleteAffiliations", fields: [athleteId], references: [id])
+  club       User              @relation("ClubAffiliations", fields: [clubId], references: [id])
+  status     AffiliationStatus @default(PENDING)
+  message    String?
+  reviewedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([athleteId, clubId])
+  @@map("affiliations")
+}
+
+model Competition {
+  id              String            @id @default(cuid())
+  name            String
+  description     String?
+  discipline      String
+  location        String
+  startDate       DateTime
+  endDate         DateTime?
+  status          CompetitionStatus @default(DRAFT)
+  maxParticipants Int?
+  createdById     String
+  createdBy       User              @relation(fields: [createdById], references: [id])
+
+  entries CompetitionEntry[]
+  matches Match[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("competitions")
+}
+
+model CompetitionEntry {
+  id            String                 @id @default(cuid())
+  competitionId String
+  athleteId     String
+  competition   Competition            @relation(fields: [competitionId], references: [id])
+  athlete       User                   @relation(fields: [athleteId], references: [id])
+  status        CompetitionEntryStatus @default(REGISTERED)
+  weightClass   String?
+
+  registeredAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([competitionId, athleteId])
+  @@map("competition_entries")
+}
+
+model Match {
+  id            String      @id @default(cuid())
+  competitionId String
+  athleteRedId  String
+  athleteBlueId String
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  athleteRed    User        @relation("RedAthlete", fields: [athleteRedId], references: [id])
+  athleteBlue   User        @relation("BlueAthlete", fields: [athleteBlueId], references: [id])
+  round         Int
+  status        MatchStatus @default(SCHEDULED)
+  score         Json?
+  winnerId      String?
+  winner        User?       @relation("Winner", fields: [winnerId], references: [id])
+  scheduledAt   DateTime?
+  completedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("matches")
+}
+
+model ChatRoom {
+  id           String               @id @default(cuid())
+  type         ChatRoomType         @default(DM)
+  name         String?
+  participants ChatRoomParticipant[]
+  messages     Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("chat_rooms")
+}
+
+model ChatRoomParticipant {
+  id         String   @id @default(cuid())
+  chatRoomId String
+  userId     String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id])
+  joinedAt   DateTime @default(now())
+
+  @@unique([chatRoomId, userId])
+  @@map("chat_room_participants")
+}
+
+model Message {
+  id         String        @id @default(cuid())
+  roomId     String
+  senderId   String
+  room       ChatRoom      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender     User          @relation(fields: [senderId], references: [id])
+  content    String
+  readBy     MessageRead[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("messages")
+}
+
+model MessageRead {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+  readAt    DateTime @default(now())
+
+  @@unique([messageId, userId])
+  @@map("message_reads")
+}
+
+model Notification {
+  id      String           @id @default(cuid())
+  userId  String
+  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type    NotificationType
+  title   String
+  body    String
+  payload Json?
+  read    Boolean          @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}

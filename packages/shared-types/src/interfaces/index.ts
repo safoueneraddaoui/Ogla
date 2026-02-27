@@ -1,0 +1,6 @@
+export * from './affiliation.interface'
+export * from './chat.interface'
+export * from './competition.interface'
+export * from './match.interface'
+export * from './notification.interface'
+export * from './user.interface'
