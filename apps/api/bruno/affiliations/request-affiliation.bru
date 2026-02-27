@@ -1,0 +1,37 @@
+meta {
+  name: Request Affiliation
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation RequestAffiliation($input: RequestAffiliationInput!) {
+    requestAffiliation(input: $input) {
+      id
+      athleteId
+      clubId
+      status
+      message
+      createdAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "clubId": "CLUB_ID_HERE",
+      "message": "I would like to join your club."
+    }
+  }
+}

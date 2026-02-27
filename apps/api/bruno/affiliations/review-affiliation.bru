@@ -1,0 +1,43 @@
+meta {
+  name: Review Affiliation
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation ReviewAffiliation($input: ReviewAffiliationInput!) {
+    reviewAffiliation(input: $input) {
+      id
+      athleteId
+      clubId
+      status
+      reviewedAt
+      updatedAt
+      athlete {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "affiliationId": "AFFILIATION_ID_HERE",
+      "status": "ACTIVE"
+    }
+  }
+}

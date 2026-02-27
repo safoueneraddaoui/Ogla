@@ -1,0 +1,34 @@
+meta {
+  name: Leave Club
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation LeaveClub($affiliationId: String!) {
+    leaveClub(affiliationId: $affiliationId) {
+      id
+      athleteId
+      clubId
+      status
+      reviewedAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "affiliationId": "AFFILIATION_ID_HERE"
+  }
+}

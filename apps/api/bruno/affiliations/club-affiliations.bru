@@ -1,0 +1,42 @@
+meta {
+  name: Club Affiliations
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query ClubAffiliations($status: AffiliationStatus) {
+    clubAffiliations(status: $status) {
+      id
+      athleteId
+      clubId
+      status
+      message
+      reviewedAt
+      createdAt
+      updatedAt
+      athlete {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "status": null
+  }
+}

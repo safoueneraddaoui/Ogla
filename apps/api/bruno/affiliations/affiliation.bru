@@ -1,0 +1,48 @@
+meta {
+  name: Affiliation By Id
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query Affiliation($id: String!) {
+    affiliation(id: $id) {
+      id
+      athleteId
+      clubId
+      status
+      message
+      reviewedAt
+      createdAt
+      updatedAt
+      athlete {
+        id
+        email
+        firstName
+        lastName
+      }
+      club {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "AFFILIATION_ID_HERE"
+  }
+}

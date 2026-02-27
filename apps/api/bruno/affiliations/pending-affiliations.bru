@@ -1,0 +1,34 @@
+meta {
+  name: Pending Affiliations
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query PendingAffiliations {
+    pendingAffiliations {
+      id
+      athleteId
+      clubId
+      status
+      message
+      createdAt
+      athlete {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
