@@ -1,5 +1,5 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { UseGuards } from '@nestjs/common'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { UnauthorizedException, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { AuthPayload } from './dto/auth-payload.type'
 import { RegisterInput } from './dto/register.input'
@@ -12,28 +12,33 @@ import type { User } from '@prisma/client'
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation(() => AuthPayload)
+  @Mutation(() => AuthPayload, { description: 'Register a new user with email and password' })
   async register(@Args('input') input: RegisterInput): Promise<AuthPayload> {
-    return this.authService.register(input)
+    return this.authService.register(input) as unknown as Promise<AuthPayload>
   }
 
-  @Mutation(() => AuthPayload)
+  @Mutation(() => AuthPayload, { description: 'Login with email and password' })
   async login(@Args('input') input: LoginInput): Promise<AuthPayload> {
     const user = await this.authService.validateUser(input.email, input.password)
-    if (!user) throw new Error('Invalid credentials')
-    return this.authService.login(user)
+    if (!user) throw new UnauthorizedException('Invalid email or password')
+    return this.authService.login(user) as unknown as AuthPayload
   }
 
-  @Mutation(() => AuthPayload)
+  @Mutation(() => AuthPayload, { description: 'Issue new token pair using a valid refresh token' })
   async refreshTokens(@Args('refreshToken') refreshToken: string): Promise<AuthPayload> {
-    return this.authService.refreshTokens(refreshToken)
+    return this.authService.refreshTokens(refreshToken) as unknown as Promise<AuthPayload>
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: 'Invalidate the current session (client must discard tokens)' })
   @UseGuards(JwtAuthGuard)
   logout(@CurrentUser() _user: User): boolean {
-    // JWT is stateless; client discards tokens.
-    // Future: add token to a Redis denylist here.
+    // JWT is stateless — client discards tokens.
+    // TODO Phase 5: add jti to Redis denylist for true server-side invalidation.
+    return true
+  }
+
+  @Query(() => Boolean, { description: 'Health check for the auth module' })
+  authHealth(): boolean {
     return true
   }
 }

@@ -4,7 +4,7 @@ import { AffiliationsService } from './affiliations.service'
 // TODO: Define Affiliation ObjectType and full mutations
 @Resolver()
 export class AffiliationsResolver {
-  constructor(private readonly affiliationsService: AffiliationsService) {}
+  constructor(protected readonly affiliationsService: AffiliationsService) {}
 
   @Query(() => String)
   affiliationsHealth(): string {

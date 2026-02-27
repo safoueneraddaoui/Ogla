@@ -1,0 +1,22 @@
+meta {
+  name: Google OAuth — Initiate
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:4000/auth/google
+  body: none
+  auth: none
+}
+
+docs {
+  Opens the Google OAuth consent screen.
+  After the user grants permission, Google redirects to:
+    GET /auth/google/callback
+  which issues tokens and redirects to:
+    {{frontendUrl}}/auth/callback?accessToken=...&refreshToken=...
+
+  Note: This request will redirect in a browser. Bruno will follow the redirect.
+  To test the full flow, open this URL directly in a browser tab.
+}

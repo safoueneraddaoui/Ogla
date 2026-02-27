@@ -19,6 +19,9 @@ body:graphql {
         id
         email
         role
+        firstName
+        lastName
+        locale
       }
     }
   }
@@ -30,5 +33,13 @@ body:graphql:vars {
       "email": "athlete@example.com",
       "password": "password123"
     }
+  }
+}
+
+script:post-response {
+  const data = res.getBody()?.data?.login
+  if (data?.accessToken) {
+    bru.setVar('accessToken', data.accessToken)
+    bru.setVar('refreshToken', data.refreshToken)
   }
 }

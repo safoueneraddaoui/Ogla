@@ -21,6 +21,7 @@ body:graphql {
         role
         firstName
         lastName
+        createdAt
       }
     }
   }
@@ -34,5 +35,13 @@ body:graphql:vars {
       "firstName": "John",
       "lastName": "Doe"
     }
+  }
+}
+
+script:post-response {
+  const data = res.getBody()?.data?.register
+  if (data?.accessToken) {
+    bru.setVar('accessToken', data.accessToken)
+    bru.setVar('refreshToken', data.refreshToken)
   }
 }

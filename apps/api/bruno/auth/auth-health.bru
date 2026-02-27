@@ -1,0 +1,17 @@
+meta {
+  name: Auth Health Check
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  query {
+    authHealth
+  }
+}

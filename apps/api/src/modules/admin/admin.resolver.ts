@@ -11,7 +11,7 @@ import { Role } from '@ogla/shared-types'
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.SUPER_ADMIN)
 export class AdminResolver {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(protected readonly adminService: AdminService) {}
 
   @Query(() => String)
   adminHealth(): string {

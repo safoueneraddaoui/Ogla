@@ -5,7 +5,7 @@ import { Readable } from 'stream'
 
 @Injectable()
 export class MediaService {
-  constructor(private readonly configService: ConfigService) {
+  constructor(configService: ConfigService) {
     cloudinary.config({
       cloud_name: configService.get<string>('cloudinary.cloudName'),
       api_key: configService.get<string>('cloudinary.apiKey'),

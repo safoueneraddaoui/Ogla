@@ -21,6 +21,14 @@ body:graphql {
 
 body:graphql:vars {
   {
-    "refreshToken": "your-refresh-token-here"
+    "refreshToken": "{{refreshToken}}"
+  }
+}
+
+script:post-response {
+  const data = res.getBody()?.data?.refreshTokens
+  if (data?.accessToken) {
+    bru.setVar('accessToken', data.accessToken)
+    bru.setVar('refreshToken', data.refreshToken)
   }
 }

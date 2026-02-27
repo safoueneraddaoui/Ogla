@@ -4,7 +4,7 @@ import { ClubsService } from './clubs.service'
 // TODO: Define ClubProfile ObjectType and full CRUD mutations
 @Resolver()
 export class ClubsResolver {
-  constructor(private readonly clubsService: ClubsService) {}
+  constructor(protected readonly clubsService: ClubsService) {}
 
   @Query(() => String)
   clubsHealth(): string {

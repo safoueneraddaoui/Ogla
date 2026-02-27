@@ -7,29 +7,29 @@ registerEnumType(Locale, { name: 'Locale' })
 @ObjectType('User')
 export class UserType {
   @Field(() => ID)
-  id: string
+  id!: string
 
   @Field()
-  email: string
+  email!: string
 
   @Field(() => Role)
-  role: Role
+  role!: Role
 
   @Field()
-  firstName: string
+  firstName!: string
 
   @Field()
-  lastName: string
+  lastName!: string
 
   @Field({ nullable: true })
   avatar?: string
 
   @Field(() => Locale)
-  locale: Locale
+  locale!: Locale
 
   @Field()
-  createdAt: Date
+  createdAt!: Date
 
   @Field()
-  updatedAt: Date
+  updatedAt!: Date
 }

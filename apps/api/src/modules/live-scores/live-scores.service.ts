@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from '../../prisma/prisma.service'
 
 @Injectable()
@@ -10,6 +11,6 @@ export class LiveScoresService {
   }
 
   async updateScore(matchId: string, score: Record<string, unknown>) {
-    return this.prisma.match.update({ where: { id: matchId }, data: { score } })
+    return this.prisma.match.update({ where: { id: matchId }, data: { score: score as Prisma.InputJsonValue } })
   }
 }

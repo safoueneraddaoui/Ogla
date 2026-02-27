@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from '../../prisma/prisma.service'
 import { NotificationType } from '@ogla/shared-types'
 
@@ -7,7 +8,7 @@ export class NotificationsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(userId: string, type: NotificationType, title: string, body: string, payload?: Record<string, unknown>) {
-    return this.prisma.notification.create({ data: { userId, type, title, body, payload } })
+    return this.prisma.notification.create({ data: { userId, type, title, body, payload: payload as Prisma.InputJsonValue | undefined } })
   }
 
   async findForUser(userId: string) {

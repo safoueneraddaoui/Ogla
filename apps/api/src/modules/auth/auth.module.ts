@@ -4,9 +4,12 @@ import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { AuthService } from './auth.service'
 import { AuthResolver } from './auth.resolver'
+import { AuthController } from './auth.controller'
 import { JwtStrategy } from './strategies/jwt.strategy'
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy'
 import { LocalStrategy } from './strategies/local.strategy'
 import { GoogleStrategy } from './strategies/google.strategy'
+import { FacebookStrategy } from './strategies/facebook.strategy'
 
 @Module({
   imports: [
@@ -19,7 +22,16 @@ import { GoogleStrategy } from './strategies/google.strategy'
       }),
     }),
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy, LocalStrategy, GoogleStrategy],
+  controllers: [AuthController],
+  providers: [
+    AuthService,
+    AuthResolver,
+    JwtStrategy,
+    JwtRefreshStrategy,
+    LocalStrategy,
+    GoogleStrategy,
+    FacebookStrategy,
+  ],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

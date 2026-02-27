@@ -4,12 +4,12 @@ import { AuthGuard } from '@nestjs/passport'
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  getRequest(context: ExecutionContext) {
+  override getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context)
     return ctx.getContext<{ req: Request }>().req
   }
 
-  handleRequest<TUser>(err: Error, user: TUser): TUser {
+  override handleRequest<TUser>(err: Error, user: TUser): TUser {
     if (err || !user) {
       throw err || new UnauthorizedException()
     }
