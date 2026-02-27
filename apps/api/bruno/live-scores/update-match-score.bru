@@ -1,0 +1,37 @@
+meta {
+  name: Update Match Score
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpdateMatchScore($input: UpdateScoreInput!) {
+    updateMatchScore(input: $input) {
+      matchId
+      score
+      status
+      winnerId
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "matchId": "MATCH_ID_HERE",
+      "score": { "red": 3, "blue": 1 },
+      "status": "LIVE"
+    }
+  }
+}

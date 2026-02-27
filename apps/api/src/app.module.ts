@@ -19,6 +19,7 @@ import { ChatModule } from './modules/chat/chat.module'
 import { NotificationsModule } from './modules/notifications/notifications.module'
 import { MediaModule } from './modules/media/media.module'
 import { AdminModule } from './modules/admin/admin.module'
+import { RedisModule } from './common/redis/redis.module'
 
 @Module({
   imports: [
@@ -47,6 +48,9 @@ import { AdminModule } from './modules/admin/admin.module'
 
     // Database
     PrismaModule,
+
+    // Infrastructure
+    RedisModule,
 
     // Feature modules
     AuthModule,

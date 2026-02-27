@@ -1,0 +1,33 @@
+meta {
+  name: Match Score
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query MatchScore($matchId: String!) {
+    matchScore(matchId: $matchId) {
+      matchId
+      score
+      status
+      winnerId
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "matchId": "MATCH_ID_HERE"
+  }
+}
