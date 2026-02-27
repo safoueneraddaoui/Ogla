@@ -2,14 +2,76 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react"
+import { gqlFetch } from "@/lib/gql-client"
+
+const LOGIN_MUTATION = `
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      accessToken
+      refreshToken
+      user {
+        id
+        email
+        firstName
+        lastName
+        role
+      }
+    }
+  }
+`
+
+interface LoginResult {
+  login: {
+    accessToken: string
+    refreshToken: string
+    user: {
+      id: string
+      email: string
+      firstName: string
+      lastName: string
+      role: string
+    }
+  }
+}
 
 export default function LoginPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email || !password) {
+      toast.error("Please enter your email and password")
+      return
+    }
+    setLoading(true)
+    try {
+      const data = await gqlFetch<LoginResult>(LOGIN_MUTATION, {
+        input: { email, password },
+      })
+      // Store tokens
+      localStorage.setItem("accessToken", data.login.accessToken)
+      localStorage.setItem("refreshToken", data.login.refreshToken)
+      localStorage.setItem("user", JSON.stringify(data.login.user))
+
+      toast.success(`Welcome back, ${data.login.user.firstName}!`)
+      router.push("/dashboard")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Login failed")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -70,10 +132,19 @@ export default function LoginPage() {
             <Separator className="flex-1" />
           </div>
 
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="athlete@ogla.com" className="h-11" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="athlete@ogla.com"
+                className="h-11"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -87,6 +158,10 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   className="h-11 pr-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  required
                 />
                 <button
                   type="button"
@@ -99,7 +174,9 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <Button size="lg" className="mt-2 w-full">Sign In</Button>
+            <Button size="lg" className="mt-2 w-full" type="submit" disabled={loading}>
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...</> : "Sign In"}
+            </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
