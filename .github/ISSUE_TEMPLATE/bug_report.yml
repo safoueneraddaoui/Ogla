@@ -1,0 +1,88 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill in as much detail as possible.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Affected area
+      options:
+        - Web (Next.js frontend)
+        - API (NestJS backend)
+        - Auth (login / register / OAuth)
+        - Athletes module
+        - Clubs module
+        - Affiliations
+        - Competitions
+        - Live scores / Real-time
+        - Chat
+        - Notifications
+        - Media upload
+        - i18n / RTL
+      multiple: true
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      placeholder: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: What actually happened? Include error messages or screenshots.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (app crashes / data loss)
+        - High (major feature broken)
+        - Medium (feature partially broken)
+        - Low (minor visual / UX issue)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        - OS: macOS / Windows / Linux
+        - Browser: Chrome 120 / Firefox 121
+        - Node.js: 20.x
+        - App version / commit hash:
+    validations:
+      required: false

@@ -1,0 +1,97 @@
+# Automatically keep dependencies up to date
+# Groups updates by ecosystem to reduce PR noise
+
+version: 2
+
+updates:
+  # ─── Root / Turborepo workspace ───────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Africa/Tunis"
+    groups:
+      turborepo:
+        patterns: ["turbo*"]
+      typescript:
+        patterns: ["typescript", "@types/*", "ts-*"]
+      eslint:
+        patterns: ["eslint*", "@eslint/*", "prettier*"]
+    labels:
+      - "dependencies"
+      - "automated"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # ─── Web app (Next.js) ───────────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /apps/web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Africa/Tunis"
+    groups:
+      nextjs:
+        patterns: ["next", "next-*", "@next/*"]
+      react:
+        patterns: ["react", "react-dom", "@types/react*"]
+      apollo-client:
+        patterns: ["@apollo/*", "apollo-*", "graphql"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*", "tailwind-*"]
+      shadcn-radix:
+        patterns: ["@radix-ui/*", "class-variance-authority", "clsx", "lucide-react"]
+      i18n:
+        patterns: ["next-intl"]
+      testing:
+        patterns: ["jest*", "@jest/*", "@testing-library/*", "vitest*"]
+    labels:
+      - "dependencies"
+      - "apps/web"
+      - "automated"
+    open-pull-requests-limit: 5
+
+  # ─── API app (NestJS) ────────────────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /apps/api
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Africa/Tunis"
+    groups:
+      nestjs:
+        patterns: ["@nestjs/*", "nest-*"]
+      graphql:
+        patterns: ["@nestjs/graphql", "graphql-*", "apollo-server*"]
+      prisma:
+        patterns: ["prisma", "@prisma/*"]
+      auth:
+        patterns: ["passport*", "@nestjs/passport", "jsonwebtoken*", "@nestjs/jwt"]
+      redis:
+        patterns: ["ioredis", "@nestjs/cache-manager", "cache-manager*"]
+      i18n:
+        patterns: ["nestjs-i18n"]
+      testing:
+        patterns: ["jest*", "@jest/*", "supertest*"]
+    labels:
+      - "dependencies"
+      - "apps/api"
+      - "automated"
+    open-pull-requests-limit: 5
+
+  # ─── GitHub Actions workflows ─────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - "dependencies"
+      - "ci/cd"
+      - "automated"
+    open-pull-requests-limit: 3

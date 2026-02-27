@@ -1,0 +1,81 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide as much context as possible.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Which area does this feature relate to?
+      options:
+        - Web (Next.js frontend)
+        - API (NestJS backend)
+        - Auth
+        - Athletes module
+        - Clubs module
+        - Affiliations
+        - Competitions
+        - Live scores / Real-time
+        - Chat
+        - Notifications
+        - Media upload
+        - i18n / RTL
+        - Mobile (future)
+        - DevOps / Infrastructure
+        - New module / feature area
+      multiple: true
+    validations:
+      required: true
+
+  - type: dropdown
+    id: roadmap
+    attributes:
+      label: Which MVP phase does this belong to?
+      options:
+        - Phase 1 — Auth & Profiles
+        - Phase 2 — Affiliations & Discovery
+        - Phase 3 — Competitions
+        - Phase 4 — Real-time / Live scores
+        - Phase 5 — Chat & Notifications
+        - Phase 6 — i18n / Mobile
+        - Future / Not in roadmap
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      placeholder: |
+        Describe the problem this feature solves.
+        e.g., "As an Athlete, I cannot track my competition history..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      placeholder: Describe the feature and how it should work.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Any alternative approaches you considered?
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      placeholder: Mockups, references, or any other relevant information.
+    validations:
+      required: false
