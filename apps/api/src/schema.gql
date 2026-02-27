@@ -1,0 +1,603 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AdminUserObjectType {
+  avatar: String
+  createdAt: DateTime!
+  email: String!
+  firstName: String!
+  id: String!
+  lastName: String!
+  role: Role!
+  updatedAt: DateTime!
+}
+
+enum AffiliationStatus {
+  ACTIVE
+  LEFT
+  PENDING
+  REJECTED
+}
+
+type AffiliationType {
+  athlete: User
+  athleteId: String!
+  club: User
+  clubId: String!
+  createdAt: DateTime!
+  id: ID!
+  message: String
+  reviewedAt: DateTime
+  status: AffiliationStatus!
+  updatedAt: DateTime!
+}
+
+type AthleteProfileListType {
+  limit: Int!
+  page: Int!
+  profiles: [AthleteProfileType!]!
+  total: Int!
+}
+
+type AthleteProfileType {
+  achievements: JSON
+  beltRank: String
+  bio: String
+  dateOfBirth: DateTime
+  disciplines: [String!]!
+  id: ID!
+  user: User
+  userId: String!
+  weightClass: String
+}
+
+type AuthPayload {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input ChangeRoleInput {
+  role: Role!
+  userId: String!
+}
+
+type ChatRoomObjectType {
+  createdAt: DateTime!
+  id: ID!
+  messages: [MessageObjectType!]!
+  name: String
+  participants: [ChatRoomParticipantObjectType!]!
+  type: ChatRoomType!
+  updatedAt: DateTime!
+}
+
+type ChatRoomParticipantObjectType {
+  chatRoomId: String!
+  id: ID!
+  joinedAt: DateTime!
+  userId: String!
+}
+
+enum ChatRoomType {
+  DM
+  GROUP
+}
+
+type ClubProfileListType {
+  limit: Int!
+  page: Int!
+  profiles: [ClubProfileType!]!
+  total: Int!
+}
+
+type ClubProfileType {
+  address: String
+  description: String
+  disciplines: [String!]!
+  foundedYear: Int
+  id: ID!
+  logo: String
+  name: String!
+  user: User
+  userId: String!
+  website: String
+}
+
+enum CompetitionEntryStatus {
+  CONFIRMED
+  REGISTERED
+  WITHDRAWN
+}
+
+type CompetitionEntryType {
+  athlete: User
+  athleteId: String!
+  competition: CompetitionType
+  competitionId: String!
+  id: String!
+  registeredAt: DateTime!
+  status: CompetitionEntryStatus!
+  updatedAt: DateTime!
+  weightClass: String
+}
+
+enum CompetitionStatus {
+  CLOSED
+  DRAFT
+  IN_PROGRESS
+  OPEN
+}
+
+type CompetitionType {
+  createdAt: DateTime!
+  createdBy: User
+  createdById: String!
+  description: String
+  discipline: String!
+  endDate: DateTime
+  id: String!
+  location: String!
+  maxParticipants: Int
+  name: String!
+  startDate: DateTime!
+  status: CompetitionStatus!
+  updatedAt: DateTime!
+}
+
+input CreateCompetitionInput {
+  description: String
+  discipline: String!
+  endDate: String
+  location: String!
+  maxParticipants: Int
+  name: String!
+  startDate: String!
+}
+
+input CreateMatchInput {
+  athleteBlueId: String!
+  athleteRedId: String!
+  competitionId: String!
+  round: Int!
+  scheduledAt: String
+}
+
+input CreateRoomInput {
+  name: String
+  participantIds: [String!]!
+  type: ChatRoomType!
+}
+
+type DashboardStatsType {
+  totalAffiliations: Int!
+  totalAthletes: Int!
+  totalClubs: Int!
+  totalCompetitions: Int!
+  totalMatches: Int!
+  totalMessages: Int!
+  totalUsers: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Returned by deleteMedia."""
+type DeleteResultType {
+  publicId: String!
+  result: String!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+input JoinRoomInput {
+  roomId: String!
+}
+
+type LiveScoreUpdateType {
+  matchId: String!
+
+  """Current score payload (arbitrary JSON structure)"""
+  score: JSON
+  status: String!
+  updatedAt: DateTime!
+  winnerId: String
+}
+
+enum Locale {
+  AR
+  EN
+  FR
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+enum MatchStatus {
+  COMPLETED
+  LIVE
+  SCHEDULED
+}
+
+type MatchType {
+  athleteBlue: User
+  athleteBlueId: String!
+  athleteRed: User
+  athleteRedId: String!
+  competition: CompetitionType
+  competitionId: String!
+  completedAt: DateTime
+  createdAt: DateTime!
+  id: String!
+  round: Int!
+  scheduledAt: DateTime
+  score: JSON
+  status: MatchStatus!
+  updatedAt: DateTime!
+  winner: User
+  winnerId: String
+}
+
+type MessageObjectType {
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  roomId: String!
+  senderId: String!
+  updatedAt: DateTime!
+}
+
+type Mutation {
+  adminDeleteUser(userId: String!): Boolean!
+
+  """Change a user's role — SuperAdmin only"""
+  changeRole(input: ChangeRoleInput!): User!
+  createChatRoom(input: CreateRoomInput!): ChatRoomObjectType!
+
+  """SuperAdmin creates a competition"""
+  createCompetition(input: CreateCompetitionInput!): CompetitionType!
+
+  """SuperAdmin creates a match bracket entry"""
+  createMatch(input: CreateMatchInput!): MatchType!
+
+  """Permanently delete the current user account"""
+  deleteAccount: Boolean!
+
+  """Delete own athlete profile"""
+  deleteAthleteProfile: Boolean!
+
+  """Delete own club profile"""
+  deleteClubProfile: Boolean!
+
+  """SuperAdmin deletes a DRAFT competition"""
+  deleteCompetition(id: String!): CompetitionType!
+  deleteMedia(publicId: String!): DeleteResultType!
+  deleteNotification(id: String!): Boolean!
+  joinChatRoom(input: JoinRoomInput!): Boolean!
+  leaveChatRoom(roomId: String!): Boolean!
+
+  """Athlete leaves an active club affiliation"""
+  leaveClub(affiliationId: String!): AffiliationType!
+
+  """Login with email and password"""
+  login(input: LoginInput!): AuthPayload!
+
+  """Invalidate the current session (client must discard tokens)"""
+  logout: Boolean!
+  markAllNotificationsRead: Boolean!
+  markMessageRead(messageId: String!): Boolean!
+  markNotificationRead(id: String!): NotificationObjectType!
+
+  """Issue new token pair using a valid refresh token"""
+  refreshTokens(refreshToken: String!): AuthPayload!
+
+  """Register a new user with email and password"""
+  register(input: RegisterInput!): AuthPayload!
+
+  """Athlete registers for an open competition"""
+  registerForCompetition(input: RegisterEntryInput!): CompetitionEntryType!
+
+  """Athlete requests to join a club"""
+  requestAffiliation(input: RequestAffiliationInput!): AffiliationType!
+
+  """Club approves or rejects a pending affiliation request"""
+  reviewAffiliation(input: ReviewAffiliationInput!): AffiliationType!
+  sendChatMessage(input: SendMessageInput!): MessageObjectType!
+
+  """SuperAdmin updates a competition"""
+  updateCompetition(input: UpdateCompetitionInput!): CompetitionType!
+
+  """SuperAdmin updates competition status"""
+  updateCompetitionStatus(input: UpdateCompetitionStatusInput!): CompetitionType!
+
+  """SuperAdmin updates an entry status (confirm/withdraw)"""
+  updateEntryStatus(input: UpdateEntryStatusInput!): CompetitionEntryType!
+
+  """SuperAdmin updates match result / status"""
+  updateMatch(input: UpdateMatchInput!): MatchType!
+
+  """SuperAdmin updates match score in real-time"""
+  updateMatchScore(input: UpdateScoreInput!): LiveScoreUpdateType!
+
+  """Update firstName, lastName or avatar of the current user"""
+  updateProfile(input: UpdateProfileInput!): User!
+
+  """Create or update own athlete profile"""
+  upsertAthleteProfile(input: UpsertAthleteProfileInput!): AthleteProfileType!
+
+  """Create or update own club profile"""
+  upsertClubProfile(input: UpsertClubProfileInput!): ClubProfileType!
+
+  """Athlete withdraws from a competition"""
+  withdrawFromCompetition(entryId: String!): CompetitionEntryType!
+}
+
+type NotificationObjectType {
+  body: String!
+  createdAt: DateTime!
+  id: ID!
+  payload: JSON
+  read: Boolean!
+  title: String!
+  type: NotificationType!
+  userId: String!
+}
+
+enum NotificationType {
+  AFFILIATION
+  CHAT
+  COMPETITION
+  SYSTEM
+}
+
+type Query {
+  adminDashboardStats: DashboardStatsType!
+  adminUser(userId: String!): AdminUserObjectType!
+  adminUsers(role: Role, search: String): [AdminUserObjectType!]!
+
+  """Get a single affiliation by ID"""
+  affiliation(id: String!): AffiliationType!
+
+  """Get athlete profile by profile ID"""
+  athleteProfile(id: String!): AthleteProfileType!
+
+  """Get athlete profile by user ID"""
+  athleteProfileByUserId(userId: String!): AthleteProfileType!
+
+  """Paginated list of all athlete profiles"""
+  athleteProfiles(limit: Int! = 20, page: Int! = 1): AthleteProfileListType!
+
+  """Health check for the auth module"""
+  authHealth: Boolean!
+  chatMessages(cursor: String, limit: Float = 50, roomId: String!): [MessageObjectType!]!
+
+  """List a club's affiliations, optionally filtered by status"""
+  clubAffiliations(status: AffiliationStatus): [AffiliationType!]!
+
+  """Get club profile by profile ID"""
+  clubProfile(id: String!): ClubProfileType!
+
+  """Get club profile by user ID"""
+  clubProfileByUserId(userId: String!): ClubProfileType!
+
+  """Paginated list of all club profiles"""
+  clubProfiles(limit: Int! = 20, page: Int! = 1): ClubProfileListType!
+
+  """Get a competition by ID"""
+  competition(id: String!): CompetitionType!
+
+  """List entries for a competition"""
+  competitionEntries(competitionId: String!, status: CompetitionEntryStatus): [CompetitionEntryType!]!
+
+  """List matches for a competition"""
+  competitionMatches(competitionId: String!): [MatchType!]!
+
+  """List all competitions, optionally filtered by status"""
+  competitions(status: CompetitionStatus): [CompetitionType!]!
+  generateSignedUploadUrl(folder: UploadFolder!, publicId: String): SignedUploadUrlType!
+
+  """Get the current score snapshot for a match"""
+  matchScore(matchId: String!): LiveScoreUpdateType!
+
+  """Return the currently authenticated user"""
+  me: User!
+
+  """List the current athlete's affiliations, optionally filtered by status"""
+  myAffiliations(status: AffiliationStatus): [AffiliationType!]!
+  myChatRooms: [ChatRoomObjectType!]!
+
+  """List the current athlete's competition entries"""
+  myEntries(status: CompetitionEntryStatus): [CompetitionEntryType!]!
+  myNotifications(unreadOnly: Boolean = false): [NotificationObjectType!]!
+
+  """List all pending affiliation requests for the current club"""
+  pendingAffiliations: [AffiliationType!]!
+
+  """Search athletes by name, belt rank, weight class or discipline"""
+  searchAthletes(limit: Int! = 20, page: Int! = 1, query: String!): AthleteProfileListType!
+
+  """Search clubs by name, description, address or discipline"""
+  searchClubs(limit: Int! = 20, page: Int! = 1, query: String!): ClubProfileListType!
+
+  """Search users by name or email (authenticated users)"""
+  searchUsers(limit: Int! = 20, page: Int! = 1, query: String!): UserListType!
+  unreadNotificationsCount: Int!
+  uploadInfo(publicId: String!): UploadInfoType!
+
+  """Fetch any user by ID (authenticated users)"""
+  user(id: String!): User!
+
+  """List all users — SuperAdmin only"""
+  users(limit: Int! = 20, page: Int! = 1): UserListType!
+}
+
+input RegisterEntryInput {
+  competitionId: String!
+  weightClass: String
+}
+
+input RegisterInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+}
+
+input RequestAffiliationInput {
+  clubId: String!
+  message: String
+}
+
+input ReviewAffiliationInput {
+  affiliationId: String!
+  status: AffiliationStatus!
+}
+
+enum Role {
+  ATHLETE
+  CLUB
+  SUPER_ADMIN
+}
+
+input SendMessageInput {
+  content: String!
+  roomId: String!
+}
+
+"""
+Returned by generateSignedUploadUrl.
+The client uses these params to POST directly to Cloudinary's upload API,
+avoiding any binary data flowing through NestJS.
+
+Upload endpoint: POST https://api.cloudinary.com/v1_1/{cloudName}/auto/upload
+"""
+type SignedUploadUrlType {
+  apiKey: String!
+  cloudName: String!
+  folder: String!
+  publicId: String
+  signature: String!
+  timestamp: Int!
+
+  """Convenience: the full upload endpoint URL"""
+  uploadUrl: String!
+}
+
+type Subscription {
+  """Subscribe to live score updates for a specific match"""
+  matchScoreUpdated(matchId: String!): LiveScoreUpdateType!
+  newChatMessage(roomId: String!): MessageObjectType!
+  newNotification: NotificationObjectType!
+}
+
+input UpdateCompetitionInput {
+  description: String
+  discipline: String
+  endDate: String
+  id: String!
+  location: String
+  maxParticipants: Int
+  name: String
+  startDate: String
+}
+
+input UpdateCompetitionStatusInput {
+  id: String!
+  status: CompetitionStatus!
+}
+
+input UpdateEntryStatusInput {
+  entryId: String!
+  status: CompetitionEntryStatus!
+}
+
+input UpdateMatchInput {
+  completedAt: String
+  matchId: String!
+  scheduledAt: String
+  score: JSON
+  status: MatchStatus
+  winnerId: String
+}
+
+input UpdateProfileInput {
+  avatar: String
+  firstName: String
+  lastName: String
+}
+
+input UpdateScoreInput {
+  matchId: String!
+
+  """Arbitrary score JSON (e.g. { red: 3, blue: 1 })"""
+  score: JSON
+  status: String
+  winnerId: String
+}
+
+enum UploadFolder {
+  AVATARS
+  CLUB_LOGOS
+  COMPETITION_PHOTOS
+  GENERAL
+}
+
+"""
+Returned by getUploadInfo — verifies an asset was uploaded and returns metadata.
+"""
+type UploadInfoType {
+  bytes: Int!
+  createdAt: String!
+  format: String!
+  height: Int!
+  publicId: String!
+  resourceType: String!
+  secureUrl: String!
+  width: Int!
+}
+
+input UpsertAthleteProfileInput {
+  achievements: JSON
+  beltRank: String
+  bio: String
+  dateOfBirth: DateTime
+  disciplines: [String!]
+  weightClass: String
+}
+
+input UpsertClubProfileInput {
+  address: String
+  description: String
+  disciplines: [String!]
+  foundedYear: Int
+  logo: String
+  name: String!
+  website: String
+}
+
+type User {
+  avatar: String
+  createdAt: DateTime!
+  email: String!
+  firstName: String!
+  id: ID!
+  lastName: String!
+  locale: Locale!
+  role: Role!
+  updatedAt: DateTime!
+}
+
+type UserListType {
+  limit: Int!
+  page: Int!
+  total: Int!
+  users: [User!]!
+}

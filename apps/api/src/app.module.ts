@@ -7,7 +7,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { join } from 'path'
 import configuration from './config/configuration'
 import { PrismaModule } from './prisma/prisma.module'
-import { JsonScalar } from './common/scalars/json.scalar'
 import { AuthModule } from './modules/auth/auth.module'
 import { UsersModule } from './modules/users/users.module'
 import { AthletesModule } from './modules/athletes/athletes.module'
@@ -65,6 +64,6 @@ import { RedisModule } from './common/redis/redis.module'
     MediaModule,
     AdminModule,
   ],
-  providers: [JsonScalar],
+  providers: [],
 })
 export class AppModule {}
