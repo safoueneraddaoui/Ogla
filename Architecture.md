@@ -167,6 +167,70 @@ model for professional martial arts networking.
 
 ---
 
+### ADR-008: Docker Compose for Local Infrastructure
+
+**Context:** Local development needs PostgreSQL and Redis without polluting the host machine.
+
+**Decision:** All local infrastructure services run as Docker containers via `docker-compose.yml` at the monorepo root.
+
+**Rationale:**
+- Zero host-level installations required (no local `pg`, no local `redis-server`)
+- `docker compose up -d` gives every developer an identical local environment instantly
+- Environment parity: same images (`postgres:16-alpine`, `redis:7-alpine`) used in CI
+- Easy teardown / reset (`docker compose down -v` wipes volumes cleanly)
+- Mirrors production service versions exactly
+
+**Local service map:**
+
+| Service    | Image              | Port  | Env var default                                      |
+| ---------- | ------------------ | ----- | ---------------------------------------------------- |
+| PostgreSQL | postgres:16-alpine | 5432  | `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ogla` |
+| Redis      | redis:7-alpine     | 6379  | `REDIS_URL=redis://localhost:6379`                   |
+
+**Consequences:**
+- Docker Desktop (or OrbStack on macOS) must be running before `npm run dev`
+- CI uses `services:` blocks in GitHub Actions — same images, no Docker Compose needed in CI
+
+---
+
+### ADR-009: Bruno (VS Code) for API Testing
+
+**Context:** Need a lightweight tool to manually test and document all GraphQL operations during development.
+
+**Decision:** Bruno VS Code extension. Collections committed to `apps/api/bruno/`.
+
+**Rationale:**
+- Bruno stores collections as plain files (committed to Git) — no external accounts or cloud sync
+- VS Code extension integrates directly into the development workflow
+- Supports GraphQL queries, mutations, and subscriptions natively
+- Environments (`local`, `staging`) stored as env files alongside collections
+- No Postman/Insomnia: eliminates JSON export/import friction and secret leaks via shared workspaces
+
+**Collection structure:**
+```
+apps/api/bruno/
+├── environments/
+│   ├── local.bru
+│   └── staging.bru
+├── auth/
+│   ├── register.bru
+│   ├── login.bru
+│   └── refresh-tokens.bru
+├── users/
+│   ├── me.bru
+│   └── update-profile.bru
+├── athletes/
+├── clubs/
+├── affiliations/
+├── competitions/
+├── chat/
+└── notifications/
+```
+
+**Convention:** Every new resolver or mutation must have a corresponding Bruno request committed in the same PR.
+
+---
+
 ## 4. Domain Model
 
 ### 4.1 Entity Relationship Diagram
@@ -420,19 +484,47 @@ subscription notificationReceived → Notification
 
 ## 9. Testing Strategy
 
-| Layer          | Tool                    | Target               |
-| -------------- | ----------------------- | -------------------- |
-| Unit (API)     | Jest                    | Services, utils      |
-| Integration    | Jest + Supertest        | Resolvers, auth flow |
-| Unit (Web)     | Jest + RTL              | Components, hooks    |
-| E2E            | Playwright (future)     | Critical user flows  |
-| DB             | Prisma test utils       | Migrations, seeds    |
+| Layer          | Tool                    | Target                              |
+| -------------- | ----------------------- | ----------------------------------- |
+| Unit (API)     | Jest                    | Services, utils                     |
+| Integration    | Jest + Supertest        | Resolvers, auth flow                |
+| Unit (Web)     | Jest + RTL              | Components, hooks                   |
+| E2E            | Playwright (future)     | Critical user flows                 |
+| DB             | Prisma test utils       | Migrations, seeds                   |
+| API (manual)   | Bruno (VS Code)         | GraphQL queries, mutations, subscriptions |
+
+**Bruno workflow:**
+- Install the Bruno VS Code extension.
+- Open `apps/api/bruno/` as the collection root.
+- Select the `local` environment (points to `http://localhost:4000/graphql`).
+- Every new resolver requires a committed `.bru` request file in the matching module folder.
+- CI does **not** run Bruno — it is a developer-facing tool only. Automated coverage is handled by Jest.
+
+**Local infra for tests:**
+Integration tests connect to a real PostgreSQL instance running in Docker. The test database is isolated via a separate `DATABASE_URL` (`ogla_test` schema). CI spins up `postgres:16` and `redis:7` as job services.
 
 ---
 
 ## 10. Deployment
 
-### MVP (Free Tier)
+### Local Development
+
+| Service    | How it runs                     | Port |
+| ---------- | ------------------------------- | ---- |
+| Web        | `npm run dev` (Next.js)         | 3000 |
+| API        | `npm run dev` (NestJS watch)    | 4000 |
+| PostgreSQL | Docker container (postgres:16)  | 5432 |
+| Redis      | Docker container (redis:7)      | 6379 |
+
+```bash
+# Start infrastructure
+docker compose up -d
+
+# Start all apps (Turborepo)
+npm run dev
+```
+
+### MVP (Free Tier — Production)
 
 | Service    | Platform   | Cost        |
 | ---------- | ---------- | ----------- |

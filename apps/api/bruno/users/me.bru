@@ -1,0 +1,30 @@
+meta {
+  name: Me (current user)
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query {
+    me {
+      id
+      email
+      role
+      firstName
+      lastName
+      avatar
+      locale
+      createdAt
+    }
+  }
+}

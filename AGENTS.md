@@ -30,6 +30,8 @@ entire ecosystem, with the specific power to create and manage competition event
 | Media Storage      | Cloudinary                              |
 | Monorepo           | Turborepo                               |
 | Testing            | Jest + React Testing Library (web), Jest (API) |
+| API Testing        | Bruno (VS Code extension)                      |
+| Local Infra        | Docker + Docker Compose                        |
 
 ## Architecture
 
@@ -149,6 +151,41 @@ apps/web/src/
 | Message          | Sender, room, content, timestamp                             |
 | Notification     | User, type, payload, read status                             |
 
+## Local Development
+
+All infrastructure services are run locally as Docker containers via Docker Compose.
+No local installations of PostgreSQL, Redis, etc. are required.
+
+```bash
+# Start all services
+docker compose up -d
+
+# Stop all services
+docker compose down
+```
+
+| Service    | Image                  | Port  |
+| ---------- | ---------------------- | ----- |
+| PostgreSQL | postgres:16-alpine     | 5432  |
+| Redis      | redis:7-alpine         | 6379  |
+
+The `docker-compose.yml` lives at the monorepo root.
+The API `.env` points to these containers by default:
+
+```
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ogla
+REDIS_URL=redis://localhost:6379
+```
+
+## API Testing
+
+All GraphQL queries, mutations, and subscriptions are tested using **Bruno** (VS Code extension).
+
+- Bruno collections live in `apps/api/bruno/` (committed to the repo).
+- Collections are organised by module: `auth/`, `users/`, `athletes/`, `clubs/`, etc.
+- Environments (`local`, `staging`) are stored in `apps/api/bruno/environments/`.
+- No Postman or Insomnia workspaces — Bruno only.
+
 ## Coding Conventions
 
 1. **Strict TypeScript:** No `any`. Proper interfaces for all GraphQL responses and domain models.
@@ -159,16 +196,17 @@ apps/web/src/
 6. **Apollo Client:** Centralized client config in `lib/apollo-client.ts`. Queries/mutations in `graphql/` folder.
 7. **Tailwind + shadcn/ui:** No CSS modules. Use Tailwind utilities and shadcn/ui primitives.
 8. **Testing:** Jest for all. React Testing Library for components. Integration tests for resolvers.
+9. **Bruno collections:** Every new resolver/mutation must have a corresponding Bruno request. Collections are committed alongside the code.
 
 ## Deployment (MVP)
 
-| Service    | Platform                  |
-| ---------- | ------------------------- |
-| Web        | Vercel                    |
-| API        | Railway or Render         |
-| PostgreSQL | Neon or Supabase (DB)     |
-| Redis      | Upstash                   |
-| Media      | Cloudinary                |
+| Service    | Local (Docker)         | Production              |
+| ---------- | ---------------------- | ----------------------- |
+| Web        | `next dev`             | Vercel                  |
+| API        | `nest start --watch`   | Railway or Render       |
+| PostgreSQL | Docker (postgres:16)   | Neon or Supabase        |
+| Redis      | Docker (redis:7)       | Upstash                 |
+| Media      | —                      | Cloudinary              |
 
 ## MVP Roadmap
 

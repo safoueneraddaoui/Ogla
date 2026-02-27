@@ -1,0 +1,35 @@
+meta {
+  name: Update Profile
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpdateProfile($input: UpdateProfileInput!) {
+    updateProfile(input: $input) {
+      id
+      firstName
+      lastName
+      avatar
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "firstName": "Jane",
+      "lastName": "Smith"
+    }
+  }
+}

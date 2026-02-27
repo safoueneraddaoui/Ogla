@@ -1,0 +1,26 @@
+meta {
+  name: Refresh Tokens
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  mutation RefreshTokens($refreshToken: String!) {
+    refreshTokens(refreshToken: $refreshToken) {
+      accessToken
+      refreshToken
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "refreshToken": "your-refresh-token-here"
+  }
+}

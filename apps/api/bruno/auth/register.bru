@@ -1,0 +1,38 @@
+meta {
+  name: Register
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  mutation Register($input: RegisterInput!) {
+    register(input: $input) {
+      accessToken
+      refreshToken
+      user {
+        id
+        email
+        role
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "email": "athlete@example.com",
+      "password": "password123",
+      "firstName": "John",
+      "lastName": "Doe"
+    }
+  }
+}
