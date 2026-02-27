@@ -1,0 +1,48 @@
+meta {
+  name: Update Match
+  type: graphql
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpdateMatch($input: UpdateMatchInput!) {
+    updateMatch(input: $input) {
+      id
+      competitionId
+      round
+      status
+      score
+      winnerId
+      completedAt
+      updatedAt
+      winner {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "matchId": "MATCH_ID_HERE",
+      "status": "COMPLETED",
+      "score": { "red": 3, "blue": 1 },
+      "winnerId": "ATHLETE_RED_ID_HERE",
+      "completedAt": "2025-09-15T10:45:00.000Z"
+    }
+  }
+}

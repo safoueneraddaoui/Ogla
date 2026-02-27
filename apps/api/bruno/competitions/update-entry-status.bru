@@ -1,0 +1,36 @@
+meta {
+  name: Update Entry Status
+  type: graphql
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpdateEntryStatus($input: UpdateEntryStatusInput!) {
+    updateEntryStatus(input: $input) {
+      id
+      competitionId
+      athleteId
+      status
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "entryId": "ENTRY_ID_HERE",
+      "status": "CONFIRMED"
+    }
+  }
+}

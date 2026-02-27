@@ -1,0 +1,51 @@
+meta {
+  name: Create Match
+  type: graphql
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation CreateMatch($input: CreateMatchInput!) {
+    createMatch(input: $input) {
+      id
+      competitionId
+      round
+      status
+      scheduledAt
+      athleteRed {
+        id
+        email
+        firstName
+        lastName
+      }
+      athleteBlue {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "competitionId": "COMPETITION_ID_HERE",
+      "athleteRedId": "ATHLETE_RED_ID_HERE",
+      "athleteBlueId": "ATHLETE_BLUE_ID_HERE",
+      "round": 1,
+      "scheduledAt": "2025-09-15T10:00:00.000Z"
+    }
+  }
+}

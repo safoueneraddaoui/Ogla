@@ -1,0 +1,41 @@
+meta {
+  name: Update Competition
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpdateCompetition($input: UpdateCompetitionInput!) {
+    updateCompetition(input: $input) {
+      id
+      name
+      description
+      discipline
+      location
+      startDate
+      endDate
+      maxParticipants
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "id": "COMPETITION_ID_HERE",
+      "name": "National Karate Championship 2025 (Updated)",
+      "maxParticipants": 128
+    }
+  }
+}

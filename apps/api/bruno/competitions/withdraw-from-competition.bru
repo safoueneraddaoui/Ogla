@@ -1,0 +1,33 @@
+meta {
+  name: Withdraw From Competition
+  type: graphql
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation WithdrawFromCompetition($entryId: String!) {
+    withdrawFromCompetition(entryId: $entryId) {
+      id
+      competitionId
+      athleteId
+      status
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "entryId": "ENTRY_ID_HERE"
+  }
+}

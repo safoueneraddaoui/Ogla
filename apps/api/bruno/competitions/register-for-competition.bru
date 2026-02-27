@@ -1,0 +1,37 @@
+meta {
+  name: Register For Competition
+  type: graphql
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation RegisterForCompetition($input: RegisterEntryInput!) {
+    registerForCompetition(input: $input) {
+      id
+      competitionId
+      athleteId
+      status
+      weightClass
+      registeredAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "competitionId": "COMPETITION_ID_HERE",
+      "weightClass": "-75kg"
+    }
+  }
+}

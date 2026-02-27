@@ -1,0 +1,35 @@
+meta {
+  name: Update Competition Status
+  type: graphql
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation UpdateCompetitionStatus($input: UpdateCompetitionStatusInput!) {
+    updateCompetitionStatus(input: $input) {
+      id
+      name
+      status
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "id": "COMPETITION_ID_HERE",
+      "status": "OPEN"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Competition Entries
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query CompetitionEntries($competitionId: String!, $status: CompetitionEntryStatus) {
+    competitionEntries(competitionId: $competitionId, status: $status) {
+      id
+      competitionId
+      athleteId
+      status
+      weightClass
+      registeredAt
+      updatedAt
+      athlete {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "competitionId": "COMPETITION_ID_HERE",
+    "status": null
+  }
+}

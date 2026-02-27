@@ -1,0 +1,40 @@
+meta {
+  name: Competition By Id
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query Competition($id: String!) {
+    competition(id: $id) {
+      id
+      name
+      description
+      discipline
+      location
+      startDate
+      endDate
+      status
+      maxParticipants
+      createdById
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "COMPETITION_ID_HERE"
+  }
+}

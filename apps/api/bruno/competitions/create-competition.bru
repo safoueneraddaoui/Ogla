@@ -1,0 +1,47 @@
+meta {
+  name: Create Competition
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation CreateCompetition($input: CreateCompetitionInput!) {
+    createCompetition(input: $input) {
+      id
+      name
+      description
+      discipline
+      location
+      startDate
+      endDate
+      status
+      maxParticipants
+      createdById
+      createdAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "input": {
+      "name": "National Karate Championship 2025",
+      "description": "Annual national karate championship open to all registered athletes.",
+      "discipline": "Karate",
+      "location": "Palais des Sports, Tunis",
+      "startDate": "2025-09-15T09:00:00.000Z",
+      "endDate": "2025-09-17T18:00:00.000Z",
+      "maxParticipants": 64
+    }
+  }
+}

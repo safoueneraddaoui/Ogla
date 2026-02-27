@@ -1,0 +1,54 @@
+meta {
+  name: Competition Matches
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query CompetitionMatches($competitionId: String!) {
+    competitionMatches(competitionId: $competitionId) {
+      id
+      competitionId
+      round
+      status
+      score
+      winnerId
+      scheduledAt
+      completedAt
+      athleteRed {
+        id
+        email
+        firstName
+        lastName
+      }
+      athleteBlue {
+        id
+        email
+        firstName
+        lastName
+      }
+      winner {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "competitionId": "COMPETITION_ID_HERE"
+  }
+}

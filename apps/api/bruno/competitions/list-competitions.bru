@@ -1,0 +1,40 @@
+meta {
+  name: List Competitions
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query Competitions($status: CompetitionStatus) {
+    competitions(status: $status) {
+      id
+      name
+      description
+      discipline
+      location
+      startDate
+      endDate
+      status
+      maxParticipants
+      createdById
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "status": null
+  }
+}
