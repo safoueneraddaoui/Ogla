@@ -1,0 +1,29 @@
+meta {
+  name: New Notification Subscription
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  subscription NewNotification {
+    newNotification {
+      id
+      type
+      title
+      body
+      payload
+      read
+      createdAt
+    }
+  }
+}

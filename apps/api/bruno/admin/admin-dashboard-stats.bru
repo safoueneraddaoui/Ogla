@@ -1,0 +1,29 @@
+meta {
+  name: Admin Dashboard Stats
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query AdminDashboardStats {
+    adminDashboardStats {
+      totalUsers
+      totalAthletes
+      totalClubs
+      totalCompetitions
+      totalAffiliations
+      totalMatches
+      totalMessages
+    }
+  }
+}

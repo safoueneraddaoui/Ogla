@@ -1,0 +1,37 @@
+meta {
+  name: Admin Users
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query AdminUsers($role: Role, $search: String) {
+    adminUsers(role: $role, search: $search) {
+      id
+      email
+      firstName
+      lastName
+      role
+      avatar
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "role": null,
+    "search": null
+  }
+}

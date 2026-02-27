@@ -1,0 +1,27 @@
+meta {
+  name: Delete Notification
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation DeleteNotification($id: String!) {
+    deleteNotification(id: $id)
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "NOTIFICATION_ID_HERE"
+  }
+}

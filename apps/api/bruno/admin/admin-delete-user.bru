@@ -1,0 +1,27 @@
+meta {
+  name: Admin Delete User
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation AdminDeleteUser($userId: String!) {
+    adminDeleteUser(userId: $userId)
+  }
+}
+
+body:graphql:vars {
+  {
+    "userId": "USER_ID_HERE"
+  }
+}

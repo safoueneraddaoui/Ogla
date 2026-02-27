@@ -1,0 +1,21 @@
+meta {
+  name: Unread Notifications Count
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  query UnreadNotificationsCount {
+    unreadNotificationsCount
+  }
+}

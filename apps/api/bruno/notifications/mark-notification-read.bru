@@ -1,0 +1,30 @@
+meta {
+  name: Mark Notification Read
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation MarkNotificationRead($id: String!) {
+    markNotificationRead(id: $id) {
+      id
+      read
+    }
+  }
+}
+
+body:graphql:vars {
+  {
+    "id": "NOTIFICATION_ID_HERE"
+  }
+}

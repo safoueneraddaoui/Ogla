@@ -1,0 +1,21 @@
+meta {
+  name: Mark All Notifications Read
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}
+  body: graphql
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:graphql {
+  mutation MarkAllNotificationsRead {
+    markAllNotificationsRead
+  }
+}
